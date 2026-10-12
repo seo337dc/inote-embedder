@@ -1,6 +1,8 @@
 # CLAUDE.md — inote-embedder
 
-새 세션은 먼저 `README.md`, 그리고 `inote` 레포의 `docs/kure/PLAN.md`를 읽는다.
+새 세션은 먼저 `README.md`, 그리고 `inote` 레포의 `docs/kure/HANDOFF.md`(브랜치 `docs/kure-handoff`, `main` 병합 전)와 `docs/kure/PLAN.md`를 읽는다.
+
+> 상태(2026-10-12): 이 레포의 몫(A2 임베딩 서비스, A3 로컬 DB·공개 글 벡터화)은 끝났다. 서비스는 `inote-ai`가 `EMBEDDER_URL`로 부른다. 운영 호스팅·레포 합치기는 PLAN.md 결정 1·9번에서 미정.
 
 ## 이 레포는
 KURE-v1 임베딩 서비스와 그 실험(로컬 pgvector, 공개 글 가져오기, 평가)을 담는 **임시 실험 레포**.
