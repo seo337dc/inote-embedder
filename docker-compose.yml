@@ -14,5 +14,20 @@ services:
     # 모델이 약 2~3GB를 쓸 것으로 예상 — 도커에 배정된 7.75GB 중 일부만 쓰게 상한을 둔다
     mem_limit: 5g
 
+  # 로컬 실험용 Postgres + pgvector (A3). 운영 DB와 완전히 분리된 이 PC 안의 DB — 공개 글만 넣는다.
+  db:
+    image: pgvector/pgvector:pg17
+    ports:
+      - "127.0.0.1:5433:5432"
+    environment:
+      POSTGRES_USER: lab
+      POSTGRES_PASSWORD: ${LAB_DB_PASSWORD:?.env에 LAB_DB_PASSWORD를 채워 주세요 (openssl rand -hex 16)}
+      POSTGRES_DB: lab
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # 처음 만들어질 때 한 번 실행된다 (이미 만들어진 DB에는 다시 실행되지 않음 — 바꾸려면 볼륨을 지우고 다시 만든다)
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
 volumes:
   models:
+  pgdata:

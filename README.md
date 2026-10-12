@@ -14,11 +14,13 @@ inote의 관련 글 추천·카테고리 제안·유사 글 알림·내 글 기�
 ## 구성
 ```
 app/main.py              FastAPI 서비스 (POST /embed, GET /health)
-tests/test_main.py       API 테스트 (가짜 인코더 — 모델 없이 돈다)
+lab/                     실험 스크립트 (로컬 DB 사용): textprep(HTML→텍스트) · knn(이웃 투표) · import_posts · embed_posts · neighbors
+db/init.sql              로컬 pgvector DB 스키마 (lab_post, lab_post_embedding)
+tests/                   API 테스트(가짜 인코더) + textprep·knn 테스트 — 모델·DB 없이 돈다
 scripts/bench.py         지연·유사도 측정 (표준 라이브러리만)
 Dockerfile               python:3.12-slim + CPU 전용 torch + sentence-transformers
 docker-compose.yml       로컬 실행 (localhost:8100만 열림, 모델은 볼륨에 저장)
-requirements.txt         서비스 의존성          requirements-test.txt  테스트 의존성
+requirements.txt         서비스 의존성   requirements-test.txt  테스트 의존성   requirements-lab.txt  실험 스크립트(psycopg)
 ```
 
 ## API
@@ -47,8 +49,21 @@ docker stats --no-stream     # 메모리
 ```
 이 PC는 Intel Mac(CPU 추론), 도커 배정 자원은 CPU 12 · 메모리 약 7.75GB.
 
+## 실험 실행 (A3) — 로컬 DB + 공개 글
+```bash
+# .env에 LAB_DB_PASSWORD도 채운다 (openssl rand -hex 16, 이 PC 안의 DB 전용)
+.venv/bin/pip install -r requirements-lab.txt
+docker compose up -d                       # embedder + db (db: localhost:5433)
+.venv/bin/python -m lab.import_posts       # 배포된 BE의 공개 API에서 공개 글만 가져오기 (비공개 글은 안 들어옴)
+.venv/bin/python -m lab.embed_posts        # 벡터 계산 (같은 글은 건너뜀)
+.venv/bin/python -m lab.neighbors --all    # 모든 글의 가까운 글 3개
+.venv/bin/python -m lab.neighbors --post "Docker"   # 특정 글의 가까운 글 5개
+.venv/bin/python -m lab.neighbors --eval   # 이웃 투표로 카테고리 맞히기 (자기 자신 제외)
+```
+DB를 초기화하려면 `docker compose down -v`(모델 볼륨도 지워지니 주의: 필요하면 `docker volume rm inote-embedder_pgdata`만 지운다).
+
 ## 진행 상태
 - [x] A1 Docker Desktop 설치·확인
 - [x] A2 임베딩 서비스: 코드·테스트(12개) → 도커 빌드(이미지 약 427MB) → 모델 로드(첫 시작 약 2분) → 측정 — 결과는 `docs/a2-results.md`
-- [ ] A3 로컬 pgvector Postgres · 공개 글 가져오기 · 백필 · 가까운 이웃 확인
+- [x] A3 로컬 pgvector Postgres · 공개 글 가져오기 · 백필 · 가까운 이웃 확인 — 결과는 `docs/a3-results.md`
 - [ ] A7 평가 세트 v0
