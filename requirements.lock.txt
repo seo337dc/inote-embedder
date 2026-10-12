@@ -1,0 +1,11 @@
+# 2026-10-12 첫 도커 빌드에서 설치된 버전 기록 (재현용 참고). 빌드는 requirements.txt의 범위를 쓰고,
+# 동작이 확인된 이 조합을 그대로 고정하고 싶으면 requirements.txt의 범위를 이 값으로 바꾼다.
+# torch는 Dockerfile에서 CPU 전용 인덱스로 설치한다.
+torch==2.14.1+cpu
+sentence-transformers==6.1.0
+transformers==5.19.0
+tokenizers==0.23.3
+numpy==2.5.4
+fastapi==0.143.0
+uvicorn==0.54.0
+pydantic==2.14.1

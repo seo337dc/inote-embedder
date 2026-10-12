@@ -1,0 +1,6 @@
+# 임베딩 서비스 실행에 필요한 것 (torch는 Dockerfile에서 CPU 전용으로 먼저 설치한다 — 기본 휠은 CUDA 포함이라 매우 큼)
+# 범위로만 적어 두었다: 첫 도커 빌드가 성공하면 `pip freeze`로 확인한 버전을 여기에 고정할 것
+fastapi>=0.115
+uvicorn>=0.30
+pydantic>=2.7
+sentence-transformers>=3.0

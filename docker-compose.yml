@@ -1,0 +1,18 @@
+# 로컬 실험용. 첫 실행은 이미지 빌드(파이썬 패키지)와 모델 내려받기로 오래 걸린다.
+#   docker compose up --build
+services:
+  embedder:
+    build: .
+    # 이 PC 밖에서는 접근하지 못하게 localhost에만 연다
+    ports:
+      - "127.0.0.1:8100:8100"
+    environment:
+      INTERNAL_SECRET: ${INTERNAL_SECRET:?.env에 INTERNAL_SECRET을 채워 주세요 (openssl rand -hex 16)}
+      EMBEDDER_MODEL: nlpai-lab/KURE-v1
+    volumes:
+      - models:/models
+    # 모델이 약 2~3GB를 쓸 것으로 예상 — 도커에 배정된 7.75GB 중 일부만 쓰게 상한을 둔다
+    mem_limit: 5g
+
+volumes:
+  models:

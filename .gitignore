@@ -1,0 +1,10 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+.DS_Store
+# 측정 결과 중 원본 데이터는 올리지 않는다 (공개 글만 쓰더라도 필요한 건 요약만 기록)
+data/

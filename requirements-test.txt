@@ -1,0 +1,4 @@
+# API 테스트(가짜 인코더)에만 필요한 것 — torch·모델 없이 돈다. 로컬 가상환경에서: pip install -r requirements-test.txt
+fastapi>=0.115
+pydantic>=2.7
+httpx>=0.27
